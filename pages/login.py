@@ -15,15 +15,24 @@ password = st.text_input("Password", type="password")
 
 if st.button("Login"):
     try:
-        result = supabase.auth.sign_in_with_password({
+        response = supabase.auth.sign_in_with_password({
             "email": email,
             "password": password
         })
-        if result.user:
-            st.session_state["user"] = result.user
-            st.success(f"Welcome {result.user.user_metadata.get('display_name', '')}!")
-            st.switch_page("home.py")  # redirect to home after login
+
+        if response.session:
+            st.session_state["user"] = response.user
+            st.success("✅ Login successful!")
+
+            # Optional: fetch display name from your 'profiles' table
+            profile_resp = supabase.table("profiles").select("display_name").eq("id", response.user.id).execute()
+            name = profile_resp.data[0]["display_name"] if profile_resp.data else "User"
+            st.success(f"🎉 Welcome, {name}!")
+
+            st.switch_page("home.py")  # Redirect to home
         else:
             st.error("Login failed. Please check your credentials.")
+
     except Exception as e:
-        st.error("Login error.")
+        st.error("❌ Login error.")
+        st.exception(e)  # Shows the actual error in dev
