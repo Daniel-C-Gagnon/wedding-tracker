@@ -1,5 +1,4 @@
 import streamlit as st
-from scipy.interpolate import insert
 from supabase import create_client, Client
 from datetime import datetime, timezone
 
