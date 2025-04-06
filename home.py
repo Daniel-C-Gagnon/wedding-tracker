@@ -1,5 +1,9 @@
 import streamlit as st
 
+if "user" not in st.session_state:
+    st.warning("🔐 You must be logged in to access this page.")
+    st.stop()
+
 st.set_page_config(page_title="Welcome", layout="centered")
 
 st.title("💍 Welcome to Our Wedding Tracker 💍")

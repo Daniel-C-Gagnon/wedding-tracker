@@ -2,6 +2,9 @@ import streamlit as st
 from supabase import create_client, Client
 from datetime import datetime, timezone
 
+if "user" not in st.session_state:
+    st.warning("🔐 You must be logged in to access this page.")
+    st.stop()
 
 # --- Supabase config ---
 url = st.secrets["supabase_url"]
